@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">AndroidSAM</string>
+    <string name="enter_text_to_speak">Enter text to speak</string>
+    <string name="speak">Speak</string>
+    <string name="pitch">Pitch</string>
+    <string name="pitch_default">64</string>
+    <string name="speed">Speed</string>
+    <string name="speed_default">72</string>
+    <string name="mouth">Mouth</string>
+    <string name="mouth_default">128</string>
+    <string name="throat">Throat</string>
+    <string name="throat_default">128</string>
 </resources>

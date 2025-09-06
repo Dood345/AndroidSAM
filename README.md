@@ -1,5 +1,7 @@
 # AndroidSAM - Text-to-Speech App
 
+Integration of https://github.com/discordier/sam
+
 AndroidSAM is an Android application that demonstrates Text-to-Speech (TTS) functionality using the "Software Automatic Mouth" (SAM) speech synthesizer, a JavaScript port of the original Commodore 64 SAM program. The app uses a WebView to run the SAM JavaScript engine and leverages a JavaScript interface to communicate between the Android native code (Kotlin) and the JavaScript environment.
 
 ## Features

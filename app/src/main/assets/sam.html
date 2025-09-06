@@ -5,25 +5,53 @@
 </head>
 <body>
     <script>
-        function speakText(text, pitch, speed) {
+        let audioContext;
+        let currentSource = null;
+
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+            if (typeof Android !== 'undefined' && typeof Android.logError !== 'undefined') {
+                Android.logError("Could not create AudioContext: " + e.message);
+            }
+        }
+
+        function speakText(text, pitch, speed, mouth, throat) {
             if (typeof Android === 'undefined' || typeof Android.logMessage === 'undefined') {
                 console.log("Android interface not available for logging.");
+                return;
             }
+
+            if (!audioContext) {
+                Android.logError("AudioContext is not available.");
+                return;
+            }
+
             try {
+                // Stop any currently playing audio
+                if (currentSource) {
+                    currentSource.stop();
+                    currentSource.disconnect();
+                    currentSource = null;
+                }
+
                 Android.logMessage("speakText called with: " + text);
 
-                if (typeof SamJs === 'undefined') { // Changed SAM to SamJs
+                if (typeof SamJs === 'undefined') {
                     Android.logError("SamJs class is not defined. Check if samjs.js is loaded correctly.");
                     return;
                 }
-                Android.logMessage("SamJs class found.");
 
-                const sam = new SamJs(); // Changed SAM to SamJs
-                Android.logMessage("SamJs instance created.");
+                const options = {
+                    pitch: pitch !== undefined ? pitch : 64,
+                    speed: speed !== undefined ? speed : 72,
+                    mouth: mouth !== undefined ? mouth : 128,
+                    throat: throat !== undefined ? throat : 128,
+                    singmode: false
+                };
 
-                sam.pitch = pitch || 64;
-                sam.speed = speed || 72;
-                Android.logMessage("SAM parameters set: pitch=" + sam.pitch + ", speed=" + sam.speed);
+                const sam = new SamJs(options);
+                Android.logMessage("SAM parameters set: pitch=" + options.pitch + ", speed=" + options.speed + ", mouth=" + options.mouth + ", throat=" + options.throat);
 
                 const wav = sam.buf32(text);
                 if (!wav || wav.length === 0) {
@@ -32,16 +60,7 @@
                 }
                 Android.logMessage("sam.buf32(text) executed. WAV data length: " + wav.length);
 
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                if (!audioContext) {
-                    Android.logError("AudioContext could not be created.");
-                    return;
-                }
-                Android.logMessage("AudioContext created. Sample rate: " + audioContext.sampleRate);
-
                 const buffer = audioContext.createBuffer(1, wav.length, 22050);
-                Android.logMessage("AudioBuffer created. Length: " + buffer.length + ", Channels: " + buffer.numberOfChannels + ", SampleRate: " + buffer.sampleRate);
-
                 buffer.getChannelData(0).set(wav);
                 Android.logMessage("AudioBuffer data set.");
 
@@ -52,10 +71,12 @@
 
                 source.onended = () => {
                     Android.logMessage("AudioBufferSource onended event fired.");
+                    source.disconnect();
+                    currentSource = null;
                     Android.onSpeechComplete();
                 };
-                Android.logMessage("AudioBufferSource onended callback set.");
 
+                currentSource = source;
                 source.start(0);
                 Android.logMessage("AudioBufferSource started.");
 
@@ -65,18 +86,17 @@
                     errorMessage += " | Stack: " + e.stack;
                 }
                 Android.logError("Error in speakText: " + errorMessage);
+                 if (currentSource) {
+                    currentSource.disconnect();
+                    currentSource = null;
+                }
             }
-        }
-
-        function setSamParameters(pitch, speed, mouth, throat) {
-            if (typeof Android !== 'undefined' && typeof Android.logMessage !== 'undefined'){
-                 Android.logMessage("setSamParameters called: pitch=" + pitch + ", speed=" + speed + ", mouth=" + mouth + ", throat=" + throat);
-            }
-            window.samParams = {pitch, speed, mouth, throat};
         }
 
         if (typeof Android !== 'undefined' && typeof Android.logMessage !== 'undefined'){
-            Android.logMessage("sam.html script loaded. Android interface detected.");
+            if (audioContext) {
+                 Android.logMessage("sam.html script loaded. AudioContext ready. Sample rate: " + audioContext.sampleRate);
+            }
         } else {
             console.log("sam.html script loaded. Android interface NOT detected.");
         }

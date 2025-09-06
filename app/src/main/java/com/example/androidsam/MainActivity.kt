@@ -1,5 +1,6 @@
 package com.example.androidsam
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         private const val JAVASCRIPT_LOG_TAG = "SAM_JS_LOG"
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -152,6 +155,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class SAMInterface {
+        @Keep
         @JavascriptInterface
         fun onSpeechComplete() {
             Log.d(JAVASCRIPT_LOG_TAG, "JavaScript onSpeechComplete called")
@@ -161,11 +165,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        @Keep
         @JavascriptInterface
         fun logMessage(message: String) {
             Log.d(JAVASCRIPT_LOG_TAG, "JS: $message")
         }
 
+        @Keep
         @JavascriptInterface
         fun logError(errorMessage: String) {
             Log.e(JAVASCRIPT_LOG_TAG, "JS ERROR: $errorMessage")

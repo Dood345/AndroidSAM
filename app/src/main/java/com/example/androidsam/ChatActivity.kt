@@ -1,6 +1,7 @@
 package com.example.androidsam
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidsam.data.ChatMessage
 import com.example.androidsam.data.VoicePreset
-import com.example.androidsam.speech.VoskRecognitionManager
 import com.example.androidsam.ui.ChatAdapter
 import com.example.androidsam.ui.ChatViewModel
 import kotlinx.coroutines.launch
@@ -38,8 +38,6 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var viewModel: ChatViewModel
-    private lateinit var voskRecognitionManager: VoskRecognitionManager
-
     private var currentPreset: VoicePreset? = null
 
     private val RECORD_AUDIO_PERMISSION_CODE = 1
@@ -71,7 +69,6 @@ class ChatActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
         viewModel.setCurrentPreset(presetName)
-        voskRecognitionManager = VoskRecognitionManager(this)
 
         setupUIForPreset()
         setupRecyclerView()
@@ -148,6 +145,7 @@ class ChatActivity : AppCompatActivity() {
         speakText(message.outputText, message.pitch, message.speed, message.mouth, message.throat)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView() {
         webView.settings.apply {
             javaScriptEnabled = true

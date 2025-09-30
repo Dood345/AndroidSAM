@@ -1,106 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>SAM</title>
-    <script src="samjs.js"></script>
+    <script src="sam.js"></script>
 </head>
 <body>
     <script>
-        let audioContext;
-        let currentSource = null;
-
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        } catch (e) {
-            if (typeof Android !== 'undefined' && typeof Android.logError !== 'undefined') {
-                Android.logError("Could not create AudioContext: " + e.message);
-            }
-        }
-
+        let currentSam = null;
+        
         function speakText(text, pitch, speed, mouth, throat) {
-            if (typeof Android === 'undefined' || typeof Android.logMessage === 'undefined') {
-                console.log("Android interface not available for logging.");
-                return;
-            }
-
-            if (!audioContext) {
-                Android.logError("AudioContext is not available.");
-                return;
-            }
-
             try {
-                // Stop any currently playing audio
-                if (currentSource) {
-                    currentSource.stop();
-                    currentSource.disconnect();
-                    currentSource = null;
-                }
+                // Corrected from 'new SAM()' to 'new SamJs()'
+                currentSam = new SamJs({
+                    pitch: pitch || 64,
+                    speed: speed || 72,
+                    mouth: mouth || 128,
+                    throat: throat || 128
+                });
+                
+                // The sam.js library has its own audio playback system.
+                // We will use its built-in speak method.
+                currentSam.speak(text).then(() => {
+                    // This promise resolves when speech is complete.
+                    if (window.Android && typeof window.Android.onSpeechComplete === 'function') {
+                        Android.onSpeechComplete();
+                    }
+                }).catch(e => {
+                    if (window.Android && typeof window.Android.onSpeechError === 'function') {
+                        Android.onSpeechError(e.toString());
+                    }
+                });
 
-                Android.logMessage("speakText called with: " + text);
-
-                if (typeof SamJs === 'undefined') {
-                    Android.logError("SamJs class is not defined. Check if samjs.js is loaded correctly.");
-                    return;
-                }
-
-                const options = {
-                    pitch: pitch !== undefined ? pitch : 64,
-                    speed: speed !== undefined ? speed : 72,
-                    mouth: mouth !== undefined ? mouth : 128,
-                    throat: throat !== undefined ? throat : 128,
-                    singmode: false
-                };
-
-                const sam = new SamJs(options);
-                Android.logMessage("SAM parameters set: pitch=" + options.pitch + ", speed=" + options.speed + ", mouth=" + options.mouth + ", throat=" + options.throat);
-
-                const wav = sam.buf32(text);
-                if (!wav || wav.length === 0) {
-                    Android.logError("sam.buf32(text) returned empty or invalid data.");
-                    return;
-                }
-                Android.logMessage("sam.buf32(text) executed. WAV data length: " + wav.length);
-
-                const buffer = audioContext.createBuffer(1, wav.length, 22050);
-                buffer.getChannelData(0).set(wav);
-                Android.logMessage("AudioBuffer data set.");
-
-                const source = audioContext.createBufferSource();
-                source.buffer = buffer;
-                source.connect(audioContext.destination);
-                Android.logMessage("AudioBufferSource created and connected.");
-
-                source.onended = () => {
-                    Android.logMessage("AudioBufferSource onended event fired.");
-                    source.disconnect();
-                    currentSource = null;
-                    Android.onSpeechComplete();
-                };
-
-                currentSource = source;
-                source.start(0);
-                Android.logMessage("AudioBufferSource started.");
-
-            } catch (e) {
-                var errorMessage = e.message || e.toString();
-                if (e.stack) {
-                    errorMessage += " | Stack: " + e.stack;
-                }
-                Android.logError("Error in speakText: " + errorMessage);
-                 if (currentSource) {
-                    currentSource.disconnect();
-                    currentSource = null;
+            } catch(e) {
+                if (window.Android && typeof window.Android.onSpeechError === 'function') {
+                    Android.onSpeechError(e.toString());
                 }
             }
         }
-
-        if (typeof Android !== 'undefined' && typeof Android.logMessage !== 'undefined'){
-            if (audioContext) {
-                 Android.logMessage("sam.html script loaded. AudioContext ready. Sample rate: " + audioContext.sampleRate);
-            }
-        } else {
-            console.log("sam.html script loaded. Android interface NOT detected.");
+        
+        function stopSpeaking() {
+            // The library does not provide a direct stop method for the promise-based speak.
+            // This would require a more complex implementation if needed.
         }
     </script>
 </body>

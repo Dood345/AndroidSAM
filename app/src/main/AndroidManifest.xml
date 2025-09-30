@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -10,15 +18,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidSAM">
+
+        <property
+            android:name="android.permission.RECORD_AUDIO.attributionTag"
+            android:value="speech_recognition" />
+        <property
+            android:name="android.media.audio.attributionTag"
+            android:value="text_to_speech" />
+
         <activity
-            android:name=".MainActivity"
+            android:name=".PresetSelectionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false">
+        </activity>
+
     </application>
 
 </manifest>

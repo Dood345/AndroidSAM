@@ -33,7 +33,13 @@ class PresetAdapter(
 
         fun bind(preset: VoicePreset) {
             nameTextView.text = preset.name
-            detailsTextView.text = "Speed: ${preset.speed}, Pitch: ${preset.pitch}, Mouth: ${preset.mouth}, Throat: ${preset.throat}"
+            detailsTextView.text = itemView.context.getString(
+                R.string.preset_details,
+                preset.speed,
+                preset.pitch,
+                preset.mouth,
+                preset.throat
+            )
         }
     }
 }

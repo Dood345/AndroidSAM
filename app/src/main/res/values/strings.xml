@@ -10,4 +10,5 @@
     <string name="mouth_default">128</string>
     <string name="throat">Throat</string>
     <string name="throat_default">128</string>
+    <string name="preset_details">Speed: %1$d, Pitch: %2$d, Mouth: %3$d, Throat: %4$d</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.androidsam.data
+package com.appsters.androidsam.data
 
 import android.content.Context
 import androidx.room.Database

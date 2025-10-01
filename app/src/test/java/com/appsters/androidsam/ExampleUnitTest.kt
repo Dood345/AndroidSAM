@@ -1,4 +1,4 @@
-package com.example.androidsam
+package com.appsters.androidsam
 
 import org.junit.Test
 

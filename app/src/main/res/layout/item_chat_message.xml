@@ -42,7 +42,7 @@
         android:id="@+id/replayButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Replay"
+        android:text="@string/placeholder_replay"
         android:layout_gravity="end"/>
 
 </LinearLayout>

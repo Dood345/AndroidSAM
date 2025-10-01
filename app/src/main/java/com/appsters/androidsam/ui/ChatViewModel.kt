@@ -1,10 +1,10 @@
-package com.example.androidsam.ui
+package com.appsters.androidsam.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.androidsam.data.AppDatabase
-import com.example.androidsam.data.ChatMessage
+import com.appsters.androidsam.data.AppDatabase
+import com.appsters.androidsam.data.ChatMessage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

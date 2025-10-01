@@ -1,12 +1,12 @@
-package com.example.androidsam.ui
+package com.appsters.androidsam.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.androidsam.R
-import com.example.androidsam.data.VoicePreset
+import com.appsters.androidsam.R
+import com.appsters.androidsam.data.VoicePreset
 
 class PresetAdapter(
     private val presets: List<VoicePreset>,

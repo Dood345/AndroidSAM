@@ -30,13 +30,13 @@
         android:layout_margin="8dp">
 
         <!-- Sliders for Custom Preset -->
-        <TextView android:id="@+id/pitchLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pitch"/>
+        <TextView android:id="@+id/pitchLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/placeholder_pitch"/>
         <SeekBar android:id="@+id/pitchSeekBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="255"/>
-        <TextView android:id="@+id/speedLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Speed"/>
+        <TextView android:id="@+id/speedLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/placeholder_speed"/>
         <SeekBar android:id="@+id/speedSeekBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="255"/>
-        <TextView android:id="@+id/mouthLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mouth"/>
+        <TextView android:id="@+id/mouthLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/placeholder_mouth"/>
         <SeekBar android:id="@+id/mouthSeekBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="255"/>
-        <TextView android:id="@+id/throatLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Throat"/>
+        <TextView android:id="@+id/throatLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/placeholder_throat"/>
         <SeekBar android:id="@+id/throatSeekBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="255"/>
     </LinearLayout>
 
@@ -56,22 +56,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Type or speak..."
+            android:autofillHints="none"
+            android:hint="@string/placeholder_type_or_speak"
             android:inputType="text"/>
 
         <ImageButton
             android:id="@+id/micButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_btn_speak_now"
-            android:contentDescription="Record"
+            android:src="@drawable/ic_mic"
+            android:contentDescription="@string/placeholder_record"
             android:layout_marginStart="8dp"/>
 
         <Button
             android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send"
+            android:text="@string/placeholder_send"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 

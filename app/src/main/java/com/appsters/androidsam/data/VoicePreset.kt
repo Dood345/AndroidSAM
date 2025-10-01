@@ -1,4 +1,4 @@
-package com.example.androidsam.data
+package com.appsters.androidsam.data
 
 data class VoicePreset(
     val name: String,

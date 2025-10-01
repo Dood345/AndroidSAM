@@ -1,4 +1,4 @@
-package com.example.androidsam.data
+package com.appsters.androidsam.data
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -12,10 +12,12 @@ interface ChatMessageDao {
     
     @Insert
     suspend fun insertMessage(message: ChatMessage)
-    
+
+    @Suppress("unused")
     @Query("DELETE FROM chat_messages WHERE presetName = :presetName")
     suspend fun deleteMessagesForPreset(presetName: String)
-    
+
+    @Suppress("unused")
     @Query("DELETE FROM chat_messages")
     suspend fun deleteAllMessages()
 }

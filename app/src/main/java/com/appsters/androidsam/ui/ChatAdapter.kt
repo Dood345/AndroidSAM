@@ -1,4 +1,4 @@
-package com.example.androidsam.ui
+package com.appsters.androidsam.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.androidsam.R
-import com.example.androidsam.data.ChatMessage
+import com.appsters.androidsam.R
+import com.appsters.androidsam.data.ChatMessage
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -42,7 +42,13 @@ class ChatAdapter(
             timestampText.text = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date(message.timestamp))
             if (message.presetName == "Custom") {
                 presetInfoText.visibility = View.VISIBLE
-                presetInfoText.text = "P:${message.pitch} S:${message.speed} M:${message.mouth} T:${message.throat}"
+                presetInfoText.text = itemView.context.getString(
+                    R.string.preset_info_format,
+                    message.pitch,
+                    message.speed,
+                    message.mouth,
+                    message.throat
+                )
             } else {
                 presetInfoText.visibility = View.GONE
             }

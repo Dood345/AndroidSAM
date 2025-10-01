@@ -1,9 +1,14 @@
-package com.example.androidsam
+package com.appsters.androidsam
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.view.MotionEvent
 import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -15,12 +20,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.androidsam.data.ChatMessage
-import com.example.androidsam.data.VoicePreset
-import com.example.androidsam.ui.ChatAdapter
-import com.example.androidsam.ui.ChatViewModel
+import com.appsters.androidsam.data.ChatMessage
+import com.appsters.androidsam.data.VoicePreset
+import com.appsters.androidsam.ui.ChatAdapter
+import com.appsters.androidsam.ui.ChatViewModel
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.Locale
 
 class ChatActivity : AppCompatActivity() {
 
@@ -40,7 +46,8 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var viewModel: ChatViewModel
     private var currentPreset: VoicePreset? = null
 
-    private val RECORD_AUDIO_PERMISSION_CODE = 1
+    private val recordAudioPermissionCode = 1
+    private lateinit var speechRecognizer: SpeechRecognizer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +74,15 @@ class ChatActivity : AppCompatActivity() {
         mouthSeekBar = findViewById(R.id.mouthSeekBar)
         throatSeekBar = findViewById(R.id.throatSeekBar)
 
-        viewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this)[ChatViewModel::class.java]
         viewModel.setCurrentPreset(presetName)
 
         setupUIForPreset()
         setupRecyclerView()
         setupClickListeners()
         setupWebView()
+        setupSpeechRecognizer()
 
         observeMessages()
     }
@@ -100,12 +109,23 @@ class ChatActivity : AppCompatActivity() {
         chatRecyclerView.adapter = chatAdapter
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupClickListeners() {
-        micButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), RECORD_AUDIO_PERMISSION_CODE)
-            } else {
-                startRecognition()
+        micButton.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), recordAudioPermissionCode)
+                    } else {
+                        startRecognition()
+                    }
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    stopRecognition()
+                    true
+                }
+                else -> false
             }
         }
 
@@ -169,7 +189,56 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun startRecognition() {
-        Toast.makeText(this, "Speech recognition not implemented yet.", Toast.LENGTH_SHORT).show()
+        micButton.setImageResource(R.drawable.ic_mic_active) // Or some other visual feedback
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Listening...")
+        }
+        speechRecognizer.startListening(intent)
+    }
+
+    private fun stopRecognition() {
+        micButton.setImageResource(R.drawable.ic_mic) // Restore original icon
+        speechRecognizer.stopListening()
+    }
+    
+    private fun setupSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {}
+            override fun onError(error: Int) {
+                val errorMessage = when (error) {
+                    SpeechRecognizer.ERROR_AUDIO -> "Audio recording error"
+                    SpeechRecognizer.ERROR_CLIENT -> "Client side error"
+                    SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Insufficient permissions"
+                    SpeechRecognizer.ERROR_NETWORK -> "Network error"
+                    SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "Network timeout"
+                    SpeechRecognizer.ERROR_NO_MATCH -> "No match"
+                    SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "Recognizer busy"
+                    SpeechRecognizer.ERROR_SERVER -> "Error from server"
+                    SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "No speech input"
+                    else -> "Unknown speech recognition error"
+                }
+                Toast.makeText(this@ChatActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                micButton.setImageResource(R.drawable.ic_mic) // Restore original icon
+            }
+
+            override fun onResults(results: Bundle?) {
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                if (!matches.isNullOrEmpty()) {
+                    processAndSpeakText(matches[0])
+                }
+                micButton.setImageResource(R.drawable.ic_mic) // Restore original icon
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {}
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+        })
     }
 
     private fun replayMessage(message: ChatMessage) {
@@ -184,15 +253,21 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == RECORD_AUDIO_PERMISSION_CODE) {
+        if (requestCode == recordAudioPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startRecognition()
+                // Don't start recognition here, it will be started on the next touch down
             } else {
                 Toast.makeText(this, "Permission to record audio denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        speechRecognizer.destroy()
+    }
+
+    @Suppress("unused")
     inner class SAMInterface {
         @JavascriptInterface
         fun onSpeechComplete() {}

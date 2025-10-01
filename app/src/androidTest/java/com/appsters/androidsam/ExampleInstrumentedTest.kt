@@ -1,4 +1,4 @@
-package com.example.androidsam
+package com.appsters.androidsam
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

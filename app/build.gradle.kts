@@ -2,14 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 android {
-    namespace = "com.example.androidsam"
+    namespace = "com.appsters.androidsam"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.androidsam"
+        applicationId = "com.appsters.androidsam"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -31,6 +32,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {

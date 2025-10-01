@@ -19,14 +19,14 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="Preset Name"/>
+            android:text="@string/placeholder_preset_name"/>
 
         <TextView
             android:id="@+id/presetDetailsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:text="Speed: 72, Pitch: 64"/>
+            android:text="@string/placeholder_preset_details_preview"/>
 
     </LinearLayout>
 

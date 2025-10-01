@@ -3,13 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:padding="16dp"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chat History Settings"
+        android:text="@string/settings_title"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginTop="16dp"
@@ -21,7 +20,7 @@
         android:id="@+id/clearAllButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Clear All Messages"
+        android:text="@string/settings_clear_all_messages"
         android:drawableStart="@drawable/ic_delete"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -30,7 +29,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear by Preset"
+        android:text="@string/settings_clear_by_preset"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginStart="16dp"
@@ -41,6 +40,9 @@
         android:id="@+id/presetsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"/>
 
 </LinearLayout>

@@ -23,4 +23,12 @@
     <string name="placeholder_replay">Replay</string>
     <string name="placeholder_preset_name">Preset Name</string>
     <string name="placeholder_preset_details_preview">Speed: 72, Pitch: 64</string>
+
+    <!-- Settings Page -->
+    <string name="settings_descriptor">Settings</string>
+    <string name="settings_title">Chat History Settings</string>
+    <string name="settings_clear_all_messages">Clear All Messages</string>
+    <string name="settings_clear_by_preset">Clear by Preset</string>
+    <string name="settings_clear_button">Clear</string>
+
 </resources>

@@ -1,34 +1,48 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- General App -->
     <string name="app_name">AndroidSAM</string>
-    <string name="enter_text_to_speak" tools:keep="@string/enter_text_to_speak">Enter text to speak</string>
-    <string name="speak" tools:keep="@string/speak">Speak</string>
-    <string name="pitch" tools:keep="@string/pitch">Pitch</string>
-    <string name="pitch_default" tools:keep="@string/pitch_default">64</string>
-    <string name="speed" tools:keep="@string/speed">Speed</string>
-    <string name="speed_default" tools:keep="@string/speed_default">72</string>
-    <string name="mouth" tools:keep="@string/mouth">Mouth</string>
-    <string name="mouth_default" tools:keep="@string/mouth_default">128</string>
-    <string name="throat" tools:keep="@string/throat">Throat</string>
-    <string name="throat_default" tools:keep="@string/throat_default">128</string>
-    <string name="preset_details">Speed: %1$d, Pitch: %2$d, Mouth: %3$d, Throat: %4$d</string>
-    <string name="preset_info_format">P:%1$d S:%2$d M:%3$d T:%4$d</string>
+
+    <!-- Preset Selection Page -->
     <string name="placeholder_select_voice_preset">Select a Voice Preset</string>
-    <string name="placeholder_pitch">Pitch</string>
-    <string name="placeholder_speed">Speed</string>
-    <string name="placeholder_mouth">Mouth</string>
-    <string name="placeholder_throat">Throat</string>
+    <string name="settings_descriptor">Settings</string>
+
+    <!-- Preset Item Card -->
+    <string name="placeholder_preset_name">Preset Name</string>
+    <string name="placeholder_preset_details_preview">Speed: 72, Pitch: 64</string>
+    <string name="preset_details">Speed: %1$d, Pitch: %2$d, Mouth: %3$d, Throat: %4$d</string>
+
+    <!-- Chat Page -->
     <string name="placeholder_type_or_speak">Type or speak…</string>
     <string name="placeholder_record">Record</string>
     <string name="placeholder_send">Send</string>
+    <string name="enter_text_to_speak" tools:keep="@string/enter_text_to_speak">Enter text to speak</string>
+    <string name="speak" tools:keep="@string/speak">Speak</string>
+
+    <!-- Chat Message Item -->
     <string name="placeholder_replay">Replay</string>
-    <string name="placeholder_preset_name">Preset Name</string>
-    <string name="placeholder_preset_details_preview">Speed: 72, Pitch: 64</string>
+    <string name="preset_info_format">P:%1$d S:%2$d M:%3$d T:%4$d</string>
+
+    <!-- Custom Preset Sliders -->
+    <string name="placeholder_pitch">Pitch</string>
+    <string name="pitch">Pitch</string>
+    <string name="pitch_default" tools:keep="@string/pitch_default">64</string>
+    <string name="placeholder_speed">Speed</string>
+    <string name="speed">Speed</string>
+    <string name="speed_default" tools:keep="@string/speed_default">72</string>
+    <string name="placeholder_mouth">Mouth</string>
+    <string name="mouth">Mouth</string>
+    <string name="mouth_default" tools:keep="@string/mouth_default">128</string>
+    <string name="placeholder_throat">Throat</string>
+    <string name="throat">Throat</string>
+    <string name="throat_default" tools:keep="@string/throat_default">128</string>
 
     <!-- Settings Page -->
-    <string name="settings_descriptor">Settings</string>
     <string name="settings_title">Chat History Settings</string>
     <string name="settings_clear_all_messages">Clear All Messages</string>
     <string name="settings_clear_by_preset">Clear by Preset</string>
+
+    <!-- Settings Preset Item -->
     <string name="settings_clear_button">Clear</string>
 
 </resources>

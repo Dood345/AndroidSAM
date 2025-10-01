@@ -30,4 +30,16 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
             dao.insertMessage(message)
         }
     }
+
+    fun clearAllMessages() {
+        viewModelScope.launch {
+            dao.deleteAllMessages()
+        }
+    }
+
+    fun clearMessagesForPreset(presetName: String) {
+        viewModelScope.launch {
+            dao.deleteMessagesForPreset(presetName)
+        }
+    }
 }

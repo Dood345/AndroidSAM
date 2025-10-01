@@ -137,7 +137,7 @@ class ChatActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun processAndSpeakText(text: String) {
         val preset = if (currentPreset?.name == "Custom") {
             VoicePreset(
@@ -202,7 +202,7 @@ class ChatActivity : AppCompatActivity() {
         micButton.setImageResource(R.drawable.ic_mic) // Restore original icon
         speechRecognizer.stopListening()
     }
-    
+
     private fun setupSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
